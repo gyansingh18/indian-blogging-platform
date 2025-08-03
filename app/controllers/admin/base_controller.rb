@@ -2,8 +2,14 @@ class Admin::BaseController < ApplicationController
   before_action :authenticate_admin!
   
   def login
-    # This method is called when admin is not authenticated
-    # The authenticate_admin! method will handle the login logic
+    # This method handles both GET and POST requests
+    if request.post?
+      # Handle login form submission
+      authenticate_admin!
+    else
+      # Show login form
+      render 'admin/login', layout: false
+    end
   end
   
   def logout
@@ -24,12 +30,12 @@ class Admin::BaseController < ApplicationController
       if params[:username] == admin_username && params[:password] == admin_password
         session[:admin_logged_in] = true
         redirect_to admin_root_path
-      elsif params[:username] || params[:password]
+      elsif request.post? && (params[:username] || params[:password])
         flash[:error] = "Invalid admin credentials"
         render 'admin/login', layout: false
-      else
+      elsif request.get?
         render 'admin/login', layout: false
       end
     end
   end
-end 
+end

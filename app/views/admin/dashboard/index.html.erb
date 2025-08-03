@@ -114,7 +114,7 @@
                 <div>
                   <h6 class="mb-1"><%= post.title %></h6>
                   <small class="text-muted">
-                    By <%= post.user.display_name %> • 
+                    By <%= post.user.display_name %> •
                     <%= time_ago_in_words(post.created_at) %> ago •
                     <span class="badge bg-<%= post.status == 'published' ? 'success' : 'warning' %>">
                       <%= post.status %>
@@ -147,7 +147,7 @@
                 <div>
                   <h6 class="mb-1"><%= user.display_name %></h6>
                   <small class="text-muted">
-                    <%= user.email %> • 
+                    <%= user.email %> •
                     <%= time_ago_in_words(user.created_at) %> ago •
                     <%= pluralize(user.posts.count, 'post') %>
                   </small>
@@ -180,13 +180,13 @@
                   <h6 class="mb-1"><%= comment.user.display_name %></h6>
                   <p class="mb-1"><%= truncate(comment.content, length: 100) %></p>
                   <small class="text-muted">
-                    On "<%= comment.post.title %>" • 
+                    On "<%= comment.post.title %>" •
                     <%= time_ago_in_words(comment.created_at) %> ago
                   </small>
                 </div>
                 <div>
-                  <%= link_to "Delete", admin_comment_path(comment), 
-                      method: :delete, 
+                  <%= link_to "Delete", admin_comment_path(comment),
+                      method: :delete,
                       data: { confirm: "Are you sure?" },
                       class: "btn btn-sm btn-outline-danger" %>
                 </div>
