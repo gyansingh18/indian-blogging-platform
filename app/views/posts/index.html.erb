@@ -17,23 +17,23 @@
     <h3>🔍 Search & Filter Posts</h3>
     <%= search_form_for @q, url: posts_path, method: :get do |f| %>
       <div class="filter-row">
-        <div class="col-md-4">
+        <div class="form-group">
           <%= f.label :title_or_body_cont, "Search Posts", class: "form-label" %>
           <%= f.search_field :title_or_body_cont, class: "form-control", placeholder: "Search by title or content..." %>
         </div>
 
-        <div class="col-md-3">
+        <div class="form-group">
           <%= f.label :created_at_gteq, "From Date", class: "form-label" %>
           <%= f.date_field :created_at_gteq, class: "form-control" %>
         </div>
 
-        <div class="col-md-3">
+        <div class="form-group">
           <%= f.label :created_at_lteq, "To Date", class: "form-label" %>
           <%= f.date_field :created_at_lteq, class: "form-control" %>
         </div>
 
-        <div class="col-md-2 d-flex align-items-end">
-          <%= f.submit "Search", class: "btn btn-primary w-100" %>
+        <div class="form-group">
+          <%= f.submit "Search", class: "btn btn-primary" %>
         </div>
       </div>
 
