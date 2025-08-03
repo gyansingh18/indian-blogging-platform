@@ -28,7 +28,7 @@ Rails.application.routes.draw do
     delete '/logout', to: 'base#logout'
     resources :posts, only: [:index, :show, :destroy]
     resources :users, only: [:index, :show]
-    resources :comments, only: [:destroy]
+    resources :comments, only: [:show, :destroy]
   end
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

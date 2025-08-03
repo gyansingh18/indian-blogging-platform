@@ -6,7 +6,7 @@
       <p class="text-muted mb-0">Admin view for: <%= @post.title %></p>
     </div>
     <div>
-      <%= link_to "🏛️ Dashboard", admin_root_path, class: "btn btn-outline-secondary me-2" %>
+      <%= link_to "🏛️ Dashboard", admin_path, class: "btn btn-outline-secondary me-2" %>
       <%= link_to "📝 All Posts", admin_posts_path, class: "btn btn-outline-primary me-2" %>
       <%= link_to "🌐 Public View", post_path(@post), class: "btn btn-outline-info" %>
     </div>

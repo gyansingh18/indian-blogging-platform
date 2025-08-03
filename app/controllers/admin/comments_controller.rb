@@ -1,5 +1,9 @@
 class Admin::CommentsController < Admin::BaseController
-  before_action :set_comment, only: [:destroy]
+  before_action :set_comment, only: [:show, :destroy]
+  
+  def show
+    # Show comment details
+  end
 
   def destroy
     if @comment.destroy
