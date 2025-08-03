@@ -724,7 +724,7 @@ p {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
-  
+
   .filter-row .btn {
     margin-top: 0.5rem;
   }
@@ -734,16 +734,16 @@ p {
   .search-filters {
     padding: 1.5rem;
   }
-  
+
   .search-filters h3 {
     font-size: 1.1rem;
   }
-  
+
   .filter-row .form-control {
     min-height: 48px;
     font-size: 1rem;
   }
-  
+
   .filter-row .btn {
     min-height: 48px;
     font-size: 1rem;

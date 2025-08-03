@@ -1,0 +1,110 @@
+<div class="container-fluid py-4">
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h1 class="h2 mb-0">👥 Manage Users</h1>
+      <p class="text-muted mb-0">Admin control for all registered users</p>
+    </div>
+    <div>
+      <%= link_to "🏛️ Dashboard", admin_root_path, class: "btn btn-outline-secondary me-2" %>
+      <%= link_to "🌐 View Site", root_path, class: "btn btn-outline-primary" %>
+    </div>
+  </div>
+
+  <!-- Statistics -->
+  <div class="row mb-4">
+    <div class="col-md-3">
+      <div class="card bg-primary text-white">
+        <div class="card-body text-center">
+          <h4><%= @users.count %></h4>
+          <p class="mb-0">Total Users</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card bg-success text-white">
+        <div class="card-body text-center">
+          <h4><%= @users.joins(:posts).distinct.count %></h4>
+          <p class="mb-0">Active Authors</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card bg-info text-white">
+        <div class="card-body text-center">
+          <h4><%= @users.joins(:comments).distinct.count %></h4>
+          <p class="mb-0">Commenters</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card bg-warning text-white">
+        <div class="card-body text-center">
+          <h4><%= @users.where('created_at >= ?', 7.days.ago).count %></h4>
+          <p class="mb-0">New This Week</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Users Table -->
+  <div class="card">
+    <div class="card-header">
+      <h5 class="mb-0">📋 All Users</h5>
+    </div>
+    <div class="card-body">
+      <% if @users.any? %>
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead class="table-light">
+              <tr>
+                <th>User</th>
+                <th>Email</th>
+                <th>Posts</th>
+                <th>Comments</th>
+                <th>Joined</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @users.each do |user| %>
+                <tr>
+                  <td>
+                    <div>
+                      <strong><%= user.display_name %></strong>
+                    </div>
+                  </td>
+                  <td>
+                    <small class="text-muted"><%= user.email %></small>
+                  </td>
+                  <td>
+                    <span class="badge bg-primary"><%= user.posts.count %></span>
+                  </td>
+                  <td>
+                    <span class="badge bg-info"><%= user.comments.count %></span>
+                  </td>
+                  <td>
+                    <small class="text-muted">
+                      <%= user.created_at.strftime("%b %d, %Y") %>
+                      <br><%= time_ago_in_words(user.created_at) %> ago
+                    </small>
+                  </td>
+                  <td>
+                    <div class="btn-group" role="group">
+                      <%= link_to "👁️ View", admin_user_path(user), class: "btn btn-sm btn-outline-primary" %>
+                    </div>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% else %>
+        <div class="text-center py-5">
+          <h4 class="text-muted">👥 No users found</h4>
+          <p class="text-muted">There are no users in the system yet.</p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

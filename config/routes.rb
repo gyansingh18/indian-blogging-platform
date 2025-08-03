@@ -23,6 +23,8 @@ Rails.application.routes.draw do
   # Admin routes (optional)
   namespace :admin do
     get '/', to: 'dashboard#index'
+    get '/login', to: 'base#login'
+    delete '/logout', to: 'base#logout'
     resources :posts, only: [:index, :show, :destroy]
     resources :users, only: [:index, :show]
     resources :comments, only: [:destroy]
