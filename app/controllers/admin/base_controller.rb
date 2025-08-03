@@ -26,17 +26,20 @@ class Admin::BaseController < ApplicationController
     admin_password = "admin123"
 
     # Check if admin is already logged in via session
-    unless session[:admin_logged_in]
-      # Check if credentials are provided
-      if params[:username] == admin_username && params[:password] == admin_password
-        session[:admin_logged_in] = true
-        redirect_to admin_path, status: :see_other
-      elsif request.post? && (params[:username] || params[:password])
-        flash[:error] = "Invalid admin credentials"
-        render 'admin/login', layout: false
-      elsif request.get?
-        render 'admin/login', layout: false
-      end
+    if session[:admin_logged_in]
+      # Admin is already logged in, allow access
+      return
+    end
+
+    # Admin is not logged in, check credentials
+    if params[:username] == admin_username && params[:password] == admin_password
+      session[:admin_logged_in] = true
+      redirect_to admin_path, status: :see_other
+    elsif request.post? && (params[:username] || params[:password])
+      flash[:error] = "Invalid admin credentials"
+      render 'admin/login', layout: false
+    elsif request.get?
+      render 'admin/login', layout: false
     end
   end
 end
