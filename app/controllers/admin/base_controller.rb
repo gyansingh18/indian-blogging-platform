@@ -1,5 +1,6 @@
 class Admin::BaseController < ApplicationController
   before_action :authenticate_admin!
+  skip_before_action :verify_authenticity_token, only: [:login]
 
   def login
     # This method handles both GET and POST requests
@@ -29,7 +30,7 @@ class Admin::BaseController < ApplicationController
       # Check if credentials are provided
       if params[:username] == admin_username && params[:password] == admin_password
         session[:admin_logged_in] = true
-        redirect_to admin_path
+        redirect_to admin_path, status: :see_other
       elsif request.post? && (params[:username] || params[:password])
         flash[:error] = "Invalid admin credentials"
         render 'admin/login', layout: false
