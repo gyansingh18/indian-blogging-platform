@@ -1,6 +1,6 @@
 class Admin::CommentsController < Admin::BaseController
   before_action :set_comment, only: [:show, :destroy]
-  
+
   def show
     # Show comment details
   end
