@@ -1,0 +1,193 @@
+<div class="container py-5">
+  <!-- Welcome Section -->
+  <div class="row mb-5">
+    <div class="col-12">
+      <h1 class="text-gradient">Welcome back, <%= current_user.display_name %>! 👋</h1>
+      <p class="text-muted">Here's what's happening with your blog today.</p>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="dashboard-stats">
+    <div class="stat-card fade-in-up">
+      <div class="stat-number"><%= @published_posts.count %></div>
+      <div class="stat-label">Published Posts</div>
+    </div>
+
+    <div class="stat-card fade-in-up">
+      <div class="stat-number"><%= @draft_posts.count %></div>
+      <div class="stat-label">Draft Posts</div>
+    </div>
+
+    <div class="stat-card fade-in-up">
+      <div class="stat-number"><%= @recent_comments.count %></div>
+      <div class="stat-label">Recent Comments</div>
+    </div>
+
+    <div class="stat-card fade-in-up">
+      <div class="stat-number"><%= @notifications.count %></div>
+      <div class="stat-label">Unread Notifications</div>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- Published Posts -->
+    <div class="col-lg-6 mb-4">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5>📝 Published Posts</h5>
+          <%= link_to "View All", posts_path, class: "btn btn-primary btn-sm" %>
+        </div>
+        <div class="card-body">
+          <% if @published_posts.any? %>
+            <% @published_posts.limit(5).each do |post| %>
+              <div class="d-flex justify-content-between align-items-start mb-3 p-3 border rounded">
+                <div class="flex-grow-1">
+                  <h6 class="mb-1">
+                    <%= link_to post.title, post_path(post), class: "text-decoration-none" %>
+                  </h6>
+                  <small class="text-muted">
+                    <%= time_ago_in_words(post.created_at) %> ago •
+                    <%= pluralize(post.comments.count, 'comment') %>
+                  </small>
+                </div>
+                <div class="ms-3">
+                  <%= link_to "Edit", edit_post_path(post), class: "btn btn-outline-primary btn-sm" %>
+                </div>
+              </div>
+            <% end %>
+          <% else %>
+            <p class="text-muted text-center py-3">No published posts yet.</p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Draft Posts -->
+    <div class="col-lg-6 mb-4">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5>📄 Draft Posts</h5>
+          <%= link_to "Create New", new_post_path, class: "btn btn-success btn-sm" %>
+        </div>
+        <div class="card-body">
+          <% if @draft_posts.any? %>
+            <% @draft_posts.limit(5).each do |post| %>
+              <div class="d-flex justify-content-between align-items-start mb-3 p-3 border rounded">
+                <div class="flex-grow-1">
+                  <h6 class="mb-1">
+                    <%= link_to post.title, edit_post_path(post), class: "text-decoration-none" %>
+                  </h6>
+                  <small class="text-muted">
+                    Last edited <%= time_ago_in_words(post.updated_at) %> ago
+                  </small>
+                </div>
+                <div class="ms-3">
+                  <%= link_to "Continue", edit_post_path(post), class: "btn btn-outline-warning btn-sm" %>
+                </div>
+              </div>
+            <% end %>
+          <% else %>
+            <p class="text-muted text-center py-3">No draft posts. Start writing!</p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- Recent Comments -->
+    <div class="col-lg-6 mb-4">
+      <div class="card">
+        <div class="card-header">
+          <h5>💬 Recent Comments</h5>
+        </div>
+        <div class="card-body">
+          <% if @recent_comments.any? %>
+            <% @recent_comments.each do |comment| %>
+              <div class="comment mb-3">
+                <div class="comment-header">
+                  <span class="comment-author"><%= comment.user.display_name %></span>
+                  <span class="comment-date"><%= time_ago_in_words(comment.created_at) %> ago</span>
+                </div>
+                <div class="comment-content">
+                  <%= truncate(comment.content, length: 100) %>
+                </div>
+                <small class="text-muted">
+                  on <%= link_to comment.post.title, post_path(comment.post), class: "text-decoration-none" %>
+                </small>
+              </div>
+            <% end %>
+          <% else %>
+            <p class="text-muted text-center py-3">No recent comments.</p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notifications -->
+    <div class="col-lg-6 mb-4">
+      <div class="card">
+        <div class="card-header">
+          <h5>🔔 Notifications</h5>
+        </div>
+        <div class="card-body">
+          <% if @notifications.any? %>
+            <% @notifications.each do |notification| %>
+              <div class="notification <%= 'unread' unless notification.read %>">
+                <div class="d-flex justify-content-between align-items-start">
+                  <div class="flex-grow-1">
+                    <p class="mb-1"><%= notification.message %></p>
+                    <small class="text-muted">
+                      <%= time_ago_in_words(notification.created_at) %> ago
+                    </small>
+                  </div>
+                  <% unless notification.read %>
+                    <span class="badge badge-primary">New</span>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          <% else %>
+            <p class="text-muted text-center py-3">No notifications.</p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h5>⚡ Quick Actions</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-3 mb-3">
+              <%= link_to new_post_path, class: "btn btn-primary w-100" do %>
+                ✍️ Create New Post
+              <% end %>
+            </div>
+            <div class="col-md-3 mb-3">
+              <%= link_to posts_path, class: "btn btn-outline-primary w-100" do %>
+                📖 View All Posts
+              <% end %>
+            </div>
+            <div class="col-md-3 mb-3">
+              <%= link_to edit_user_registration_path, class: "btn btn-outline-secondary w-100" do %>
+                ⚙️ Edit Profile
+              <% end %>
+            </div>
+            <div class="col-md-3 mb-3">
+              <%= link_to root_path, class: "btn btn-outline-info w-100" do %>
+                🏠 Go Home
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

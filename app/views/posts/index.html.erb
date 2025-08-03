@@ -1,0 +1,166 @@
+<!-- Hero Section -->
+<section class="hero-section">
+  <div class="container">
+    <h1 class="text-gradient">Discover Amazing Indian Stories</h1>
+    <p>Explore the rich culture, traditions, and modern innovations of India through our curated collection of blog posts.</p>
+    <% if user_signed_in? %>
+      <%= link_to "Create New Post", new_post_path, class: "btn btn-light btn-lg" %>
+    <% else %>
+      <%= link_to "Join Our Community", new_user_registration_path, class: "btn btn-light btn-lg" %>
+    <% end %>
+  </div>
+</section>
+
+<div class="container py-5">
+  <!-- Search and Filters -->
+  <div class="search-filters">
+    <h3>🔍 Search & Filter Posts</h3>
+    <%= search_form_for @q, url: posts_path, method: :get do |f| %>
+      <div class="filter-row">
+        <div class="col-md-4">
+          <%= f.label :title_or_body_cont, "Search Posts", class: "form-label" %>
+          <%= f.search_field :title_or_body_cont, class: "form-control", placeholder: "Search by title or content..." %>
+        </div>
+
+        <div class="col-md-3">
+          <%= f.label :created_at_gteq, "From Date", class: "form-label" %>
+          <%= f.date_field :created_at_gteq, class: "form-control" %>
+        </div>
+
+        <div class="col-md-3">
+          <%= f.label :created_at_lteq, "To Date", class: "form-label" %>
+          <%= f.date_field :created_at_lteq, class: "form-control" %>
+        </div>
+
+        <div class="col-md-2 d-flex align-items-end">
+          <%= f.submit "Search", class: "btn btn-primary w-100" %>
+        </div>
+      </div>
+
+      <% if user_signed_in? %>
+        <div class="form-check">
+          <%= check_box_tag :my_posts, '1', params[:my_posts] == '1', class: "form-check-input" %>
+          <%= label_tag :my_posts, "Show only my posts", class: "form-check-label" %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+
+  <!-- Posts Grid -->
+  <div class="posts-grid">
+    <div class="row">
+      <div class="col-lg-8">
+        <% if @posts.any? %>
+          <% @posts.each do |post| %>
+            <article class="post-card fade-in-up">
+              <div class="post-card-header">
+                <h2 class="post-card-title">
+                  <%= link_to post.title, post_path(post) %>
+                </h2>
+
+                <div class="post-card-meta">
+                  <span class="post-card-author">
+                    <%= post.user.display_name %>
+                  </span>
+                  <span class="post-card-date">
+                    <%= time_ago_in_words(post.created_at) %> ago
+                  </span>
+                  <span class="post-card-status <%= post.status %>">
+                    <%= post.status %>
+                  </span>
+                </div>
+              </div>
+
+              <div class="post-card-body">
+                <p class="post-card-excerpt">
+                  <%= truncate(post.body, length: 200) %>
+                </p>
+              </div>
+
+              <div class="post-card-footer">
+                <div class="post-card-stats">
+                  <span>💬 <%= post.comments.count %> comments</span>
+                  <span>📅 <%= post.created_at.strftime("%B %d, %Y") %></span>
+                </div>
+
+                <div class="post-card-actions">
+                  <%= link_to "Read More", post_path(post), class: "btn btn-primary btn-sm" %>
+                  <% if user_signed_in? && post.user == current_user %>
+                    <%= link_to "Edit", edit_post_path(post), class: "btn btn-outline-primary btn-sm" %>
+                    <%= link_to "Delete", post_path(post),
+                        method: :delete,
+                        data: { confirm: "Are you sure?" },
+                        class: "btn btn-outline-danger btn-sm" %>
+                  <% end %>
+                </div>
+              </div>
+            </article>
+          <% end %>
+        <% else %>
+          <div class="text-center py-5">
+            <h3 class="text-muted">No posts found</h3>
+            <p class="text-muted">Try adjusting your search criteria or create the first post!</p>
+            <% if user_signed_in? %>
+              <%= link_to "Create Your First Post", new_post_path, class: "btn btn-primary" %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="col-lg-4">
+        <div class="card">
+          <div class="card-header">
+            <h5>📊 Quick Stats</h5>
+          </div>
+          <div class="card-body">
+            <div class="row text-center">
+              <div class="col-6">
+                <div class="stat-number"><%= Post.published.count %></div>
+                <div class="stat-label">Published Posts</div>
+              </div>
+              <div class="col-6">
+                <div class="stat-number"><%= User.count %></div>
+                <div class="stat-label">Active Users</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card mt-3">
+          <div class="card-header">
+            <h5>🔥 Popular Topics</h5>
+          </div>
+          <div class="card-body">
+            <div class="d-flex flex-wrap gap-2">
+              <span class="badge badge-primary">Indian Culture</span>
+              <span class="badge badge-success">Technology</span>
+              <span class="badge badge-warning">Cooking</span>
+              <span class="badge badge-info">Music</span>
+              <span class="badge badge-primary">Yoga</span>
+            </div>
+          </div>
+        </div>
+
+        <% if user_signed_in? %>
+          <div class="card mt-3">
+            <div class="card-header">
+              <h5>👤 Your Activity</h5>
+            </div>
+            <div class="card-body">
+              <p class="mb-2">
+                <strong>Your Posts:</strong> <%= current_user.posts.count %>
+              </p>
+              <p class="mb-2">
+                <strong>Your Comments:</strong> <%= current_user.comments.count %>
+              </p>
+              <p class="mb-0">
+                <strong>Member Since:</strong> <%= current_user.created_at.strftime("%B %Y") %>
+              </p>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

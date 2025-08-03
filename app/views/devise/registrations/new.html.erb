@@ -1,0 +1,84 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <h2>Join Our Community</h2>
+      <p>Create your Indian Blog account and start sharing stories</p>
+    </div>
+
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "auth-form" }) do |f| %>
+      <% if resource.errors.any? %>
+        <div class="error-messages">
+          <h4>Please fix the following errors:</h4>
+          <ul>
+            <% resource.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="form-group">
+        <%= f.label :email, class: "form-label" %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email",
+            class: "form-control", placeholder: "Enter your email address" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :password, class: "form-label" %>
+        <%= f.password_field :password, autocomplete: "new-password",
+            class: "form-control", placeholder: "Create a strong password (minimum 6 characters)" %>
+        <div class="password-strength">
+          <div class="password-strength-bar" id="password-strength"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :password_confirmation, class: "form-label" %>
+        <%= f.password_field :password_confirmation, autocomplete: "new-password",
+            class: "form-control", placeholder: "Confirm your password" %>
+      </div>
+
+      <%= f.submit "Create Account", class: "auth-submit" %>
+    <% end %>
+
+    <div class="auth-links">
+      <span>Already have an account?</span>
+      <%= link_to "Sign in", new_session_path(resource_name) %>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const passwordField = document.querySelector('input[type="password"]');
+  const strengthBar = document.getElementById('password-strength');
+
+  if (passwordField && strengthBar) {
+    passwordField.addEventListener('input', function() {
+      const password = this.value;
+      const strength = calculatePasswordStrength(password);
+      updateStrengthBar(strengthBar, strength);
+    });
+  }
+
+  function calculatePasswordStrength(password) {
+    let score = 0;
+
+    if (password.length >= 6) score += 1;
+    if (password.length >= 8) score += 1;
+    if (/[a-z]/.test(password)) score += 1;
+    if (/[A-Z]/.test(password)) score += 1;
+    if (/[0-9]/.test(password)) score += 1;
+    if (/[^A-Za-z0-9]/.test(password)) score += 1;
+
+    if (score <= 2) return 'weak';
+    if (score <= 3) return 'medium';
+    if (score <= 4) return 'strong';
+    return 'very-strong';
+  }
+
+  function updateStrengthBar(bar, strength) {
+    bar.className = `password-strength-bar ${strength}`;
+  }
+});
+</script>

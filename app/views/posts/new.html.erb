@@ -1,0 +1,11 @@
+<div class="row">
+  <div class="col-md-8 mx-auto">
+    <h1 class="mb-4">Create New Post</h1>
+
+    <%= render 'form', post: @post %>
+
+    <div class="mt-3">
+      <%= link_to "Back to Posts", posts_path, class: "btn btn-secondary" %>
+    </div>
+  </div>
+</div>
