@@ -3,12 +3,12 @@ class Admin::BaseController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [:login, :destroy]
 
   def login
-    # This method handles both GET and POST requests
+    # handles both GET (show form) and POST (process login)
     if request.post?
-      # Handle login form submission
+      # process the login form
       authenticate_admin!
     else
-      # Show login form
+      # show the login form
       render 'admin/login', layout: false
     end
   end
@@ -21,17 +21,16 @@ class Admin::BaseController < ApplicationController
   private
 
   def authenticate_admin!
-    # Hard-coded admin credentials
+    # simple hardcoded credentials for this project
     admin_username = "admin"
     admin_password = "admin123"
 
-    # Check if admin is already logged in via session
+    # if already logged in, just continue
     if session[:admin_logged_in]
-      # Admin is already logged in, allow access
       return
     end
 
-    # Admin is not logged in, check credentials
+    # check the credentials
     if params[:username] == admin_username && params[:password] == admin_password
       session[:admin_logged_in] = true
       redirect_to admin_path, status: :see_other
